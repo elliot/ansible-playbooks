@@ -1,0 +1,8 @@
+---
+
+nginx_user: www-data
+nginx_logs_path: /var/log/nginx/
+nginx_max_upload_size: 2M
+nginx_large_client_header_buffers: 4 8k
+nginx_ssl_dhparam_path: /etc/nginx/pki/dhparam.pem
+nginx_ssl_dhparam_length: 2048

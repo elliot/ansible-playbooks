@@ -1,0 +1,11 @@
+---
+- name: Install utilities
+  apt: name="{{ item }}" state=latest update_cache=yes
+  with_items:
+    - ca-certificates
+    - curl
+    - git-core
+    - htop
+    - iotop
+    - vim
+    - wget

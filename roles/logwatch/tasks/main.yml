@@ -1,0 +1,6 @@
+---
+# - name: Install logwatch
+#   apt: pkg=logwatch state=latest update_cache=yes
+
+# - name: Configure logwatch
+#   lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf regexp="Format = " line="Format = html" backup=yes

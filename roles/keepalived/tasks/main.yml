@@ -1,0 +1,13 @@
+---
+- name: Install Keepalived
+  apt: name=keepalived state=latest force=yes
+
+- name: Enable IPv4 non-local bind in kernel
+  sysctl: name="net.ipv4.ip_nonlocal_bind" value=1 sysctl_set=yes state=present reload=yes
+
+- name: Create configuration for instance
+  template: src="{{ inventory_hostname_short }}.conf" dest=/etc/keepalived/keepalived.conf mode=644
+  notify: Restart keepalived
+
+- name: Start keepalived
+  service: name=keepalived state=started enabled=yes

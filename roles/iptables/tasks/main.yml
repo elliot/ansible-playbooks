@@ -1,0 +1,9 @@
+---
+- name: Install iptables peristence
+  apt: name="{{ item }}" state=present force=yes
+  with_items:
+    - iptables-persistent
+
+- name: Install iptables rules
+  copy: src="{{ item }}" dest=/etc/iptables/{{ item | basename }} mode=644 owner=root group=root
+  with_fileglob: 'rules.*'

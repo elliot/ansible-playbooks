@@ -1,0 +1,6 @@
+---
+- name: Install supervisord dependencies
+  apt: name=python-setuptools state=latest update_cache=yes
+
+- name: Install supervisord
+  easy_install: name=supervisor

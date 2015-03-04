@@ -1,0 +1,8 @@
+---
+notification_emails:
+  - tsnetworkteam@somerville.qld.edu.au
+
+smtp_server:  10.0.0.30
+smtp_timeout: 30
+
+auth_pass: 0123456789

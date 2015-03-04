@@ -1,0 +1,10 @@
+---
+- name: Install fail2ban
+  apt: name=fail2ban state=present force=yes update_cache=yes
+
+- name: Configure fail2ban
+  copy: src="{{ item }}" dest=/etc/fail2ban/{{ item | basename }} mode=644 owner=root group=root
+  with_fileglob: '*'
+
+- name: Start fail2ban service
+  service: name=fail2ban state=started enabled=yes 

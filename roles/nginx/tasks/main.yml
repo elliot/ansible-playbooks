@@ -1,0 +1,43 @@
+---
+- name: Install Nginx PPA repository
+  apt_repository: repo="ppa:nginx/stable" state=present  update_cache=yes  validate_certs=yes
+
+- name: Install Nginx
+  apt: name=nginx state=latest force=yes
+
+- name: Install OpenSSL
+  apt: name=openssl state=latest force=yes
+
+- name: Create configuration
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=644 owner=root group=root
+
+- name: Configure mime types
+  copy: src=mime.types dest=/etc/nginx/mime.types mode=644 owner=root group=root
+
+- name: Configure extras
+  template: src="{{ item }}" dest="/etc/nginx/conf.d/{{ item | basename }}" mode=644 owner=root group=root
+  with_items:
+    - conf.d/ssl.conf
+    - conf.d/ssl-stapling.conf
+    - conf.d/x-ua-compatibile.conf
+
+# - name: Add fail2ban profile
+
+- name: Create PKI directory
+  file: path=/etc/nginx/pki state=directory
+
+- name: Disable default virtual host
+  file: dest=/etc/nginx/sites-enabled/default state=absent 
+
+# - name: Register age of dhparam file 
+#   shell: if [-a /etc/nginx/pki/dhparam ]; then find /etc/nginx/pki/dhparam -mmin +10080 -exec echo 1 \; fi
+#   register: dhparam_older_that_one_week
+
+- name: Regenerate Diffie Hellman group params
+  command: openssl dhparam -out {{ nginx_ssl_dhparam_path }} {{ nginx_ssl_dhparam_length }} creates={{ nginx_ssl_dhparam_path }}
+
+- name: Set dhparam file permissions
+  file: path={{ nginx_ssl_dhparam_path }} owner=root group=root mode=0600
+
+- name: Start Nginx service
+  service: name=nginx state=started enabled=yes

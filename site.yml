@@ -1,0 +1,29 @@
+---
+- name: Configure base 
+  sudo: yes
+  hosts: all
+  roles: 
+    # - { role: debug, tags: [debug] }
+    - { role: hostname, tags: [] }
+    - { role: common, tags: [] }
+    - { role: users, tags: [] }
+    - { role: ntp, tags: [] }
+    - { role: ssh, tags: [] }
+    - { role: locale, tags: [] }
+    - { role: fail2ban, tags: [] }
+
+
+- name: Deploy Web Servers
+  sudo: yes
+  hosts: web
+  roles: 
+    - { role: iptables, tags: [] }
+    - { role: nginx, tags: [nginx] }
+
+
+- name: Deploy Loadbalancers
+  sudo: yes
+  hosts: loadbalancers
+  roles: 
+    - { role: haproxy, tags: [lb, haproxy] }
+    - { role: keepalived, tags: [lb, keepalived] }
